@@ -1,0 +1,19 @@
+ 
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box !important;
+  margin: 0;
+  font-family: 'Poppins';
+}
+
+footer {
+  margin-top: 10px;
+  text-align: center;
+  background-color: black;
+  padding: 12px;
+  color: white;
+  font-size: 12px;
+}

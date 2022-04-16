@@ -1,0 +1,52 @@
+.vehicle-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.vehicle img {
+    object-fit: cover;
+}
+
+.vehicle h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+.vehicle {
+    display: flex;
+    flex-direction: column;
+    max-width: 285px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+}  
+
+.vehicle .vehicle-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.vehicle .vehicle-details .location {
+    color: green;
+}
+
+#expanded-vehicle-image {
+    max-width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* BOOTSTRAP */
+.modal-header, .modal-body {
+    font-family: 'Poppins'!important;
+}

@@ -1,0 +1,66 @@
+<div class="vehicle-list">
+    <div class="vehicle" *ngFor="let i of vehicleList" (click)="open(content, i)">
+        <img src="{{ i.imageUrl }}">
+        <h3>{{ i.title }}</h3>
+        <div class="vehicle-details">
+            <span>PKR {{ i.price }}</span>
+            <span class="location"><b>{{ i.location }}</b></span>
+        </div>
+        <div class="vehicle-details">
+            <span><b>Date Added:</b> {{ i.dateAdded }}</span>
+            <span><b>Ratings: </b>
+                <i class='fas fa-star' style="color: orange;" *ngFor="let in of counter(i.ratings); let j = index"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Vehicle Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+            <div>
+                <div>
+                    <h2>{{ vehicleDetails.title }}</h2>
+                    <img  id="expanded-vehicle-image" src="{{ vehicleDetails.imageUrl }}" alt="{{ vehicleDetails.title }}">
+                </div>
+                <div>
+                    <hr style="margin-left: 5%; width: 90%;">
+                    <h4 class="text-center">Seller Information</h4>
+                    <hr style="margin-left: 5%; width: 90%;">
+                    <h5>Posted By: {{ vehicleDetails.sellerName }}</h5>
+                    <p><b>Email:</b> {{ vehicleDetails.sellerEmail }}</p>
+                    <p><b>Contact Number:</b> {{ vehicleDetails.sellerContactNumber }}</p>
+                    <p><b>Comments:</b> {{ vehicleDetails.sellerComments }}</p>
+                </div>
+            </div>
+          <div class="row">
+            <hr style="margin-left: 5%; width: 90%;">
+            <h4 class="text-center">Features & Details</h4>
+            <hr style="margin-left: 5%; width: 90%;">
+            <div class="col-md-6">
+                <p class="col-md-6"><b>Price:</b> <span> PKR {{ vehicleDetails.price }}</span></p>
+                <p><b>Model:</b>&nbsp;{{ vehicleDetails.model }}</p>
+                <p><b>Make:</b>&nbsp;{{vehicleDetails.make}}</p>
+                <p><b>Color:</b>&nbsp;{{ vehicleDetails.color }}</p>
+                <p><b>Location:</b>&nbsp;{{vehicleDetails.location }}</p>
+                <p><b>Transmission:</b>&nbsp;{{ vehicleDetails.transmission }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><b>Date Added:</b>&nbsp;{{ vehicleDetails.dateAdded }}</p>
+                <p><b>Registerd In:</b>&nbsp;{{ vehicleDetails.registerdIn }}</p>
+                <p><b>Engine Capacity:</b>&nbsp;{{ vehicleDetails.engineCapacity }} cc</p>
+                <p><b>KMs Used:</b>&nbsp;{{ vehicleDetails.kmsUsed }}</p>
+                <p><b>Ratings:</b>&nbsp;
+                    <i class='fas fa-star' style="color: orange;" *ngFor="let in of counter(vehicleDetails.ratings); let j = index"></i>
+                </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
