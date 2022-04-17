@@ -2,7 +2,7 @@
     <h2>MyWheels</h2>
     <div class="filter">
         <form>
-            <select (change)="filterVehicles($event, 'city')">
+            <select id="city" (change)="filterVehicles($event, 'city')">
                 <option value="" disabled selected hidden>City</option>
                 <option value="Faisalabad">Faisalabad</option>
                 <option value="Hyderabad">Hyderabad</option>
@@ -10,7 +10,7 @@
                 <option value="Karachi">Karachi</option>
                 <option value="Lahore">Lahore</option>
             </select>
-            <select (change)="filterVehicles($event, 'make')">
+            <select id="make" (change)="filterVehicles($event, 'make')">
                 <option value="" disabled selected hidden>Make</option>
                 <option value="Honda">Honda</option>
                 <option value="Yamaha">Yamaha</option>
@@ -23,7 +23,7 @@
                 <option value="United">United</option>
                 <option value="Mitsubishi">Mitsubishi</option>   
             </select>
-            <select (change)="filterVehicles($event, 'ratings')">
+            <select id="ratings" (change)="filterVehicles($event, 'ratings')">
                 <option value="" disabled selected hidden>Rating</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -31,30 +31,30 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
-            <select (change)="filterVehicles($event, 'color')">
+            <select id="color" (change)="filterVehicles($event, 'color')">
                 <option value="" disabled selected hidden>Color</option>
                 <option value="White">White</option>
                 <option value="Silver">Silver</option>
                 <option value="Black">Black</option>
                 <option value="Red">Red</option>
             </select>
-            <select (change)="filterVehicles($event, 'engine')">
+            <select id="engine" (change)="filterVehicles($event, 'engine')">
                 <option value="" disabled selected hidden>Engine Capacity</option>
-                <option value="125">125</option>
-                <option value="200">200</option>
-                <option value="660">660</option>
-                <option value="800">800</option>
-                <option value="1000">1000</option>
-                <option value="1500">1500</option>
-                <option value="2000">2000</option>
-                <option value="2800">2800</option>
+                <option value="125">125cc</option>
+                <option value="200">200cc</option>
+                <option value="660">660cc</option>
+                <option value="800">800cc</option>
+                <option value="1000">1000cc</option>
+                <option value="1500">1500cc</option>
+                <option value="2000">2000cc</option>
+                <option value="2800">2800cc</option>
             </select>
-            <select (change)="filterVehicles($event, 'type')">
+            <select id="type" (change)="filterVehicles($event, 'type')">
                 <option value="" disabled selected hidden>Vehicle Type</option>
                 <option value="Car">Car</option>
                 <option value="Bike">Bike</option>
             </select>
-            <select (change)="filterVehicles($event, 'price')">
+            <select id="price" (change)="filterVehicles($event, 'price')">
                 <option value="" disabled selected hidden>Price Range</option>
                 <option value="1">1-5 lacs</option>
                 <option value="2">6-10 lacs</option>
@@ -62,6 +62,11 @@
                 <option value="4">20-50 lacs</option>
                 <option value="5">50 lacs+</option>
             </select>
+            <div style="margin-top: 10px;">
+                <p>Select values of all the categories and press button to perform multiple category filtering.</p>
+                <button (click)="filterVehiclesMultiple()" type="button">Filter</button>
+            </div>
+           
         </form>
     </div>
 </div>

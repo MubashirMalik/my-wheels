@@ -1,6 +1,7 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { ServicesService } from 'src/app/services.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AnyForUntypedForms } from '@angular/forms';
 
 @Component({
   selector: 'app-vehicle',
@@ -94,6 +95,34 @@ export class VehicleComponent implements OnInit {
       }
     }
 
+    this.vehicleList = filterVehicles;
+  }
+
+  filterVehiclesMultiple() {
+    this.vehicleList = this.service.vehicleList
+
+    var filterVehicles: any = [];
+    var citySelect: any; 
+    var makeSelect: any;
+    var ratingsSelect: any;
+    var colorSelect: any;
+    var engineSelect: any;
+    var typeSelect: any;
+    var priceSelect: any;
+
+    citySelect = document.getElementById("city");
+    makeSelect = document.getElementById("make");
+    ratingsSelect = document.getElementById("ratings");
+    colorSelect = document.getElementById("color");
+    engineSelect = document.getElementById("engine");
+    typeSelect = document.getElementById("type");
+    priceSelect = document.getElementById("price");
+
+    for (var vehicle of this.vehicleList) {
+      if ((vehicle.location === citySelect.value || citySelect.value === "") && (vehicle.make === makeSelect.value || makeSelect.value === "") && (vehicle.ratings == ratingsSelect.value || ratingsSelect.value === "") && (vehicle.color === colorSelect.value || colorSelect.value === "") && (vehicle.engine == engineSelect.value || engineSelect.value === "") && (vehicle.type === typeSelect.value || typeSelect.value === "")) {
+        filterVehicles.push(vehicle)
+      }
+    }
     this.vehicleList = filterVehicles;
   }
 
