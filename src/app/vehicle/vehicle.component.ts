@@ -1,36 +1,80 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
-import { ServicesService } from 'src/app/services.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AnyForUntypedForms } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { VehicleService } from '../vehicle.service';
+import { Router } from '@angular/router';
+import { Vehicle } from '../model/vehicle';
 
 @Component({
   selector: 'app-vehicle',
   templateUrl: './vehicle.component.html',
-  styleUrls: ['./vehicle.component.css']
+  styleUrls: ['./vehicle.component.css'],
+  providers: [VehicleService]
 })
 
 export class VehicleComponent implements OnInit {
   constructor(
-    private service: ServicesService,
     private modalService: NgbModal,
+    private _vehicleService: VehicleService,
+    private router: Router
   ) {}
+
+  vehicleForm = new FormGroup({
+    imageUrl: new FormControl("", Validators.required),
+    title: new FormControl("", Validators.required),
+    type: new FormControl("", Validators.required),
+    location: new FormControl("", Validators.required),
+    sellerName: new FormControl("", Validators.required),
+    sellerEmail: new FormControl("", Validators.required),
+    sellerContactNumber: new FormControl("", Validators.required),
+    sellerComments: new FormControl("", Validators.required),
+    price: new FormControl("", Validators.required),
+    model: new FormControl("", Validators.required),
+    make: new FormControl("", Validators.required),
+    color: new FormControl("", Validators.required),
+    dateAdded: new FormControl("", Validators.required),
+    transmission: new FormControl("", Validators.required),
+    registerdIn: new FormControl("", Validators.required),
+    engineCapacity: new FormControl("", Validators.required),
+    kmsUsed: new FormControl("", Validators.required),
+    ratings: new FormControl("", Validators.required),
+  });
 
   vehicleList : any; // All vehicles
   vehicleDetails: any; // Details of a vehicle
   closeResult: any;
+  copyVehicleList: any;
 
   ngOnInit(): void {
-    this.vehicleList = this.service.vehicleList
+    this._vehicleService.getVehicles().subscribe(resVehicleData => this.vehicleList = this.copyVehicleList = resVehicleData);
   }
 
   counter(i: number) {
     return new Array(i);
   }
 
+  newVehicle() {
+    if(this.vehicleForm.valid) {
+      this._vehicleService.addVehicle(this.vehicleForm.value).subscribe(res => {
+        this.vehicleForm.reset();
+        this.vehicleList.push(res);
+      });
+    } else {
+      console.log("Form is invalid..");
+    }
+  }
+
+  removeVehicle(id: String) {
+    this._vehicleService.deleteVehicle(id).subscribe(res => {
+      console.log(res);
+      this.vehicleList = this.vehicleList.filter(function(vehicle: any) { return vehicle._id !== id; });
+    });
+  }
+
   // Task 2
   filterVehicles(event: any, filterBy: string) {
 
-    this.vehicleList = this.service.vehicleList
+    this.vehicleList = this.copyVehicleList;
 
     var filterVehicles: any = [];
     if (filterBy === "city") {
@@ -99,16 +143,15 @@ export class VehicleComponent implements OnInit {
   }
 
   filterVehiclesMultiple() {
-    this.vehicleList = this.service.vehicleList
+    this.vehicleList = this.copyVehicleList;
 
     var filterVehicles: any = [];
-    var citySelect: any; 
+    var citySelect: any;
     var makeSelect: any;
     var ratingsSelect: any;
     var colorSelect: any;
     var engineSelect: any;
     var typeSelect: any;
-    var priceSelect: any;
 
     citySelect = document.getElementById("city");
     makeSelect = document.getElementById("make");
@@ -116,10 +159,9 @@ export class VehicleComponent implements OnInit {
     colorSelect = document.getElementById("color");
     engineSelect = document.getElementById("engine");
     typeSelect = document.getElementById("type");
-    priceSelect = document.getElementById("price");
 
     for (var vehicle of this.vehicleList) {
-      if ((vehicle.location === citySelect.value || citySelect.value === "") && (vehicle.make === makeSelect.value || makeSelect.value === "") && (vehicle.ratings == ratingsSelect.value || ratingsSelect.value === "") && (vehicle.color === colorSelect.value || colorSelect.value === "") && (vehicle.engine == engineSelect.value || engineSelect.value === "") && (vehicle.type === typeSelect.value || typeSelect.value === "")) {
+      if ((vehicle.location === citySelect.value || citySelect.value === "") && (vehicle.make === makeSelect.value || makeSelect.value === "") && (vehicle.ratings == ratingsSelect.value || ratingsSelect.value === "") && (vehicle.color === colorSelect.value || colorSelect.value === "") && (vehicle.engineCapacity == engineSelect.value || engineSelect.value === "") && (vehicle.type === typeSelect.value || typeSelect.value === "")) {
         filterVehicles.push(vehicle)
       }
     }
@@ -127,7 +169,7 @@ export class VehicleComponent implements OnInit {
   }
 
   // Task 3
-  open(content: any, vehicle: any) {
+  popUpDisplayVehicleDetails(content: any, vehicle: any) {
     this.vehicleDetails = vehicle;
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'})
@@ -137,5 +179,16 @@ export class VehicleComponent implements OnInit {
         },
         (reason) => {}
       );
+  }
+
+  popUpAddVehicle(content: any) {
+    this.modalService
+    .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+    .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {}
+    );
   }
 }

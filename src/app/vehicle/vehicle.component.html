@@ -21,7 +21,7 @@
                 <option value="Daihatsu">Daihatsu</option>
                 <option value="Chinese Bikes">Chinese Bikes</option>
                 <option value="United">United</option>
-                <option value="Mitsubishi">Mitsubishi</option>   
+                <option value="Mitsubishi">Mitsubishi</option>
             </select>
             <select id="ratings" (change)="filterVehicles($event, 'ratings')">
                 <option value="" disabled selected hidden>Rating</option>
@@ -54,38 +54,33 @@
                 <option value="Car">Car</option>
                 <option value="Bike">Bike</option>
             </select>
-            <select id="price" (change)="filterVehicles($event, 'price')">
-                <option value="" disabled selected hidden>Price Range</option>
-                <option value="1">1-5 lacs</option>
-                <option value="2">6-10 lacs</option>
-                <option value="3">11-20 lacs</option>
-                <option value="4">20-50 lacs</option>
-                <option value="5">50 lacs+</option>
-            </select>
             <div style="margin-top: 10px;">
                 <p>Select values of all the categories and press button to perform multiple category filtering.</p>
-                <button (click)="filterVehiclesMultiple()" type="button">Filter</button>
+                <div style="display: flex; justify-content: space-between;">
+                  <button (click)="filterVehiclesMultiple()" type="button">Filter</button>
+                  <button type="button" (click)="popUpAddVehicle(content2)">Add Vehicle</button>
+                </div>
             </div>
-           
         </form>
     </div>
 </div>
 
 <div class="vehicle-list">
-    <div class="vehicle" *ngFor="let i of vehicleList" (click)="open(content, i)">
-        <img src="{{ i.imageUrl }}">
-        <h3>{{ i.title }}</h3>
-        <div class="vehicle-details">
-            <span>PKR {{ i.price }}</span>
-            <span class="location"><b>{{ i.location }}</b></span>
-        </div>
-        <div class="vehicle-details">
-            <span><b>Date Added:</b> {{ i.dateAdded }}</span>
-            <span><b>Ratings: </b>
-                <i class='fas fa-star' style="color: orange;" *ngFor="let in of counter(i.ratings); let j = index"></i>
-            </span>
-        </div>
+  <div class="vehicle" *ngFor="let i of vehicleList">
+    <img src="assets/images/{{i.imageUrl}}" (click)="popUpDisplayVehicleDetails(content, i)">
+    <h3>{{ i.title }}</h3>
+    <div class="vehicle-details">
+        <span>PKR {{ i.price }}</span>
+        <span class="location"><b>{{ i.location }}</b></span>
     </div>
+    <div class="vehicle-details">
+      <span><b>Date Added:</b> {{ i.dateAdded }}</span>
+      <span><b>Ratings: </b>
+        <i class='fas fa-star' style="color: orange;" *ngFor="let in of counter(i.ratings); let j = index"></i>
+      </span>
+    </div>
+    <button type="button" (click)="removeVehicle(i._id)">Delete</button>
+  </div>
 </div>
 
 <ng-template #content let-modal>
@@ -99,7 +94,7 @@
             <div>
                 <div>
                     <h2>{{ vehicleDetails.title }}</h2>
-                    <img  id="expanded-vehicle-image" src="{{ vehicleDetails.imageUrl }}" alt="{{ vehicleDetails.title }}">
+                    <img  id="expanded-vehicle-image" src="assets/images/{{vehicleDetails.imageUrl}}" alt="{{ vehicleDetails.title }}">
                 </div>
                 <div>
                     <hr style="margin-left: 5%; width: 90%;">
@@ -136,4 +131,140 @@
         </div>
       </form>
     </div>
-  </ng-template>
+</ng-template>
+
+<ng-template #content2 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Vehicle</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="vehicleForm" (ngSubmit)="newVehicle()">
+      <div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Title</span>
+          </div>
+          <input formControlName="title" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+        <div>
+          <hr style="margin-left: 5%; width: 90%;">
+          <h4 class="text-center">Seller Information</h4>
+          <hr style="margin-left: 5%; width: 90%;">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Name</span>
+            </div>
+            <input formControlName="sellerName" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Email</span>
+            </div>
+            <input formControlName="sellerEmail" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Contact Number</span>
+            </div>
+            <input formControlName="sellerContactNumber" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Comments</span>
+            </div>
+            <input formControlName="sellerComments" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+        </div>
+        <div class="row">
+          <hr style="margin-left: 5%; width: 90%;">
+          <h4 class="text-center">Features & Details</h4>
+          <hr style="margin-left: 5%; width: 90%;">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Price</span>
+              </div>
+              <input formControlName="price" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Model</span>
+              </div>
+              <input formControlName="model" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Make</span>
+              </div>
+              <input formControlName="make" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Color</span>
+              </div>
+              <input formControlName="color" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Transmission</span>
+              </div>
+              <input formControlName="transmission" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Location</span>
+              </div>
+              <input formControlName="location" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Image Url</span>
+              </div>
+              <input formControlName="imageUrl" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Date Added</span>
+              </div>
+              <input formControlName="dateAdded" type="date" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Registerd In</span>
+              </div>
+              <input formControlName="registerdIn" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Engine Capacity</span>
+              </div>
+              <input formControlName="engineCapacity" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Kms Used</span>
+              </div>
+              <input formControlName="kmsUsed" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Ratings</span>
+              </div>
+              <input formControlName="ratings" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Type</span>
+              </div>
+              <input formControlName="type" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            </div>
+            <input type="submit" value="Add Vehicle" [disabled]="!vehicleForm.valid">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
