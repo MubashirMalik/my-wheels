@@ -19,6 +19,7 @@ export class VehicleComponent implements OnInit {
     private router: Router
   ) {}
 
+  updateForm: any;
   vehicleForm = new FormGroup({
     imageUrl: new FormControl("", Validators.required),
     title: new FormControl("", Validators.required),
@@ -69,6 +70,21 @@ export class VehicleComponent implements OnInit {
       console.log(res);
       this.vehicleList = this.vehicleList.filter(function(vehicle: any) { return vehicle._id !== id; });
     });
+
+    this.copyVehicleList = this.vehicleList;
+  }
+
+  updateVehicle() {
+    if(this.updateForm.valid) {
+      this._vehicleService.editVehicle(this.updateForm.value, this.vehicleDetails._id).subscribe(res => {
+        this.vehicleList = this.vehicleList.filter((vehicle: any) => { return vehicle._id !== this.vehicleDetails._id; });
+        this.vehicleList.push(res);
+        this.copyVehicleList = this.vehicleList;
+        this.updateForm.reset();
+      });
+    } else {
+      console.log("Form is invalid..");
+    }
   }
 
   // Task 2
@@ -182,6 +198,39 @@ export class VehicleComponent implements OnInit {
   }
 
   popUpAddVehicle(content: any) {
+    this.modalService
+    .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+    .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {}
+    );
+  }
+
+  popUpUpdateVehicle(content: any, vehicle: any) {
+    this.vehicleDetails = vehicle;
+    this.updateForm = new FormGroup({
+      imageUrl: new FormControl(vehicle.imageUrl, Validators.required),
+      title: new FormControl(vehicle.title, Validators.required),
+      type: new FormControl(vehicle.type, Validators.required),
+      location: new FormControl(vehicle.location, Validators.required),
+      sellerName: new FormControl(vehicle.sellerName, Validators.required),
+      sellerEmail: new FormControl(vehicle.sellerEmail, Validators.required),
+      sellerContactNumber: new FormControl(vehicle.sellerContactNumber, Validators.required),
+      sellerComments: new FormControl(vehicle.sellerComments, Validators.required),
+      price: new FormControl(vehicle.price, Validators.required),
+      model: new FormControl(vehicle.model, Validators.required),
+      make: new FormControl(vehicle.make, Validators.required),
+      color: new FormControl(vehicle.color, Validators.required),
+      dateAdded: new FormControl(vehicle.dateAdded, Validators.required),
+      transmission: new FormControl(vehicle.transmission, Validators.required),
+      registerdIn: new FormControl(vehicle.registerdIn, Validators.required),
+      engineCapacity: new FormControl(vehicle.engineCapacity, Validators.required),
+      kmsUsed: new FormControl(vehicle.kmsUsed, Validators.required),
+      ratings: new FormControl(vehicle.ratings, Validators.required),
+    });
+
     this.modalService
     .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'})
     .result.then(

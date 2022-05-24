@@ -29,4 +29,8 @@ export class VehicleService {
   deleteVehicle(id: String) {
     return this._http.delete(`${this._postUrl}/${id}`, this.httpOptions);
   }
+
+  editVehicle(vehicle: Vehicle, id: String) {
+    return this._http.put(`${this._postUrl}/${id}`, vehicle, this.httpOptions);
+  }
 }
